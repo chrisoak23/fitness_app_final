@@ -1,0 +1,21 @@
+<h1>Goals Listing Page</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Sport</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  <% @goals.each do |goal| %>
+    <tr>
+      <td><%= goal.name %></td>
+      <td><%= goal.sport %></td>
+      <td>Placeholder</td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
