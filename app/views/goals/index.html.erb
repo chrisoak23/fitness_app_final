@@ -1,21 +1,23 @@
 <h1>Goals Listing Page</h1>
-
 <table>
   <thead>
-    <tr>
-      <th>Name</th>
-      <th>Sport</th>
-      <th>Actions</th>
-    </tr>
+  <tr>
+    <th>Name</th>
+    <th>Sport</th>
+    <th colspan="3">Actions</th>
+  </tr>
   </thead>
-
   <tbody>
   <% @goals.each do |goal| %>
     <tr>
       <td><%= goal.name %></td>
       <td><%= goal.sport %></td>
-      <td>Placeholder</td>
+      <td><%= link_to 'Show', goal_path(goal) %></td>
+      <td><%= link_to 'Edit', edit_goal_path(goal) %></td>
+      <td><%= button_to 'Delete', goal_path(goal), method: :delete, data: { confirm: "Are you sure?"} %></td>
     </tr>
   <% end %>
   </tbody>
 </table>
+
+<p><%= link_to 'Create new goal', new_goal_path %></p>

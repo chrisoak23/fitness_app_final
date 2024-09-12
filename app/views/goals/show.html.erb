@@ -1,5 +1,8 @@
 <h1>Showing Goals</h1>
 
-
 <p><strong>Name: </strong><%= @goal.name %></p>
 <p><strong>Sport: </strong><%= @goal.sport %></p>
+
+<%= link_to 'Edit', edit_goal_path(@goal) %> |
+<%= button_to 'Delete', goal_path(@goal), method: :delete, data: { confirm: "Are you sure?"} %> |
+<%= link_to 'Return to Goals listing', goals_path %>

@@ -1,4 +1,4 @@
-<h1>Create a new Goal</h1>
+<h1>Edit Goal</h1>
 
 <% if @goal.errors.any? %>
   <h2>The following errors prevented the goal from being saved:</h2>
@@ -9,7 +9,7 @@
   </ul>
 <% end %>
 
-<%= form_with scope: :goal, url: goals_path, local: true do |f| %>
+<%= form_with(model: @goal, local: true) do |f| %>
   <p>
     <%= f.label :name %><br/>
     <%= f.text_field :name %>
@@ -24,5 +24,3 @@
     <%= f.submit %>
   </p>
 <% end %>
-
-<%= link_to 'Return to Goals listing', goals_path %>
