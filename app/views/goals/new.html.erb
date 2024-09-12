@@ -1,28 +1,5 @@
 <h1>Create a new Goal</h1>
 
-<% if @goal.errors.any? %>
-  <h2>The following errors prevented the goal from being saved:</h2>
-  <ul>
-    <% @goal.errors.full_messages.each do |msg| %>
-      <li><%= msg %></li>
-    <% end %>
-  </ul>
-<% end %>
-
-<%= form_with scope: :goal, url: goals_path, local: true do |f| %>
-  <p>
-    <%= f.label :name %><br/>
-    <%= f.text_field :name %>
-  </p>
-
-  <p>
-    <%= f.label :sport %><br/>
-    <%= f.text_field :sport %>
-  </p>
-
-  <p>
-    <%= f.submit %>
-  </p>
-<% end %>
+<%= render 'form' %>
 
 <%= link_to 'Return to Goals listing', goals_path %>

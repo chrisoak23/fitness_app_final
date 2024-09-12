@@ -1,26 +1,5 @@
 <h1>Edit Goal</h1>
 
-<% if @goal.errors.any? %>
-  <h2>The following errors prevented the goal from being saved:</h2>
-  <ul>
-    <% @goal.errors.full_messages.each do |msg| %>
-      <li><%= msg %></li>
-    <% end %>
-  </ul>
-<% end %>
+<%= render 'form' %>
 
-<%= form_with(model: @goal, local: true) do |f| %>
-  <p>
-    <%= f.label :name %><br/>
-    <%= f.text_field :name %>
-  </p>
-
-  <p>
-    <%= f.label :sport %><br/>
-    <%= f.text_field :sport %>
-  </p>
-
-  <p>
-    <%= f.submit %>
-  </p>
-<% end %>
+<%= link_to 'Cancel and return to Goals listing', goals_path %>

@@ -7,13 +7,13 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <% flash.each do |name, msg| %>
-      <%= msg %>
-    <% end %>
+    <%= render 'layouts/messages' %>
     <%= yield %>
   </body>
 </html>

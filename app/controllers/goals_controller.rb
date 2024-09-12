@@ -1,6 +1,7 @@
 class GoalsController < ApplicationController
+  before_action :set_article, only: [:show, :edit, :update, :destroy]
+
   def show
-    @goal = Goal.find(params[:id])
   end
 
   def index
@@ -12,11 +13,10 @@ class GoalsController < ApplicationController
   end
 
   def edit
-    @goal = Goal.find(params[:id])
   end
 
   def create
-    @goal = Goal.new(params.require(:goal).permit(:name, :sport))
+    @goal = Goal.new(article_params)
     if @goal.save
       flash[:notice] = "Goal was created successfully."
       redirect_to @goal
@@ -26,18 +26,27 @@ class GoalsController < ApplicationController
   end
 
   def update
-    @goal = Goal.find(params[:id])
-    if @goal.update(params.require(:goal).permit(:name, :sport))
+    if @goal.update(article_params)
       flash[:notice] = "Goal was updated successfully."
+      redirect_to @goal
     else
       render 'edit'
     end
   end
 
   def destroy
-    @goal = Goal.find(params[:id])
     @goal.destroy
     redirect_to goals_path
+  end
+
+  private
+
+  def set_article
+    @goal = Goal.find(params[:id])
+  end
+
+  def article_params
+    params.require(:goal).permit(:name, :sport)
   end
 
 end
