@@ -1,0 +1,17 @@
+<h1>Create a new Goal</h1>
+
+<%= form_with scope: :goal, url: goals_path, local: true do |f| %>
+  <p>
+    <%= f.label :name %><br/>
+    <%= f.text_field :name %>
+  </p>
+
+  <p>
+    <%= f.label :sport %><br/>
+    <%= f.text_field :sport %>
+  </p>
+
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>

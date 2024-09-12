@@ -7,4 +7,14 @@ class GoalsController < ApplicationController
     @goals = Goal.all
   end
 
+  def new
+
+  end
+
+  def create
+    @goal = Goal.new(params.require(:goal).permit(:name, :sport))
+    @goal.save
+    redirect_to @goal
+  end
+
 end

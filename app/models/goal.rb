@@ -1,4 +1,4 @@
 class Goal < ApplicationRecord
-  validates :goal, presence: true
+  validates :name, presence: true
   validates :sport, presence: true
 end
