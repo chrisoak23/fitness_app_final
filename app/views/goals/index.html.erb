@@ -14,9 +14,7 @@
       <td><%= goal.sport %></td>
       <td><%= link_to 'Show', goal_path(goal) %></td>
       <td><%= link_to 'Edit', edit_goal_path(goal) %></td>
-      <td><%= link_to "Delete", goal_path(goal), data: {turbo_method: :delete, turbo_confirm: "Are you sure?" } %></td>
-    </tr>
-  <% end %>
+      <td><%= button_to 'Delete', goal_path(goal), method: :delete %></td>  <% end %>
   </tbody>
 </table>
 

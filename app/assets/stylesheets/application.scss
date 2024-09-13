@@ -1,17 +1,60 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
- * vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
-
-
- *= require_tree .
- *= require_self
- */
 @import "bootstrap";
+
+.navbar {
+  background-color: royalblue !important;
+}
+
+.nav-link {
+  color: white !important;
+}
+
+#logo {
+  float: left;
+  font-size: 1.7em;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  font-weight: bold;
+}
+
+.btn-outline-success {
+  color: white !important; /* Change text color to white */
+  border-color: white !important; /* Change border color to white */
+}
+
+.btn-outline-success:hover {
+  color: white !important; /* Ensure text color remains white on hover */
+  background-color: #28a745 !important; /* Optional: Change background color on hover */
+  border-color: white !important; /* Ensure border color remains white on hover */
+}
+
+#home-container {
+  margin-top: 25px;
+}
+
+.bg-light.p-5.rounded-lg.m-3.text-center {
+  background-image: asset-url('gym.png');
+  background-size: cover; /* Adjusts the image to cover the entire element */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  color: white; /* Optional: Change text color for better contrast */
+  padding: 3rem !important; /* Custom padding */
+  border-radius: 1rem !important; /* Custom border radius */
+  margin: 1rem !important; /* Custom margin */
+  text-align: center !important; /* Custom text alignment */
+  height: 425px;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+#page-content {
+  flex: 1 0 auto;
+  background-color: lightgray;
+}
+
+#sticky-footer {
+  flex-shrink: none;
+}

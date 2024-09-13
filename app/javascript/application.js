@@ -3,10 +3,3 @@ import "@hotwired/turbo-rails"
 import "controllers"
 import "popper"
 import "bootstrap"
-
-//= require jquery_ujs
-//= require jquery3
-//= require popper
-//= require turbolinks
-//= require bootstrap
-//= require_tree .
