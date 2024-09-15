@@ -1,24 +1,42 @@
-<% if @goal.errors.any? %>
-  <h2>The following errors prevented the goal from being saved:</h2>
-  <ul>
-    <% @goal.errors.full_messages.each do |msg| %>
-      <li><%= msg %></li>
-    <% end %>
-  </ul>
-<% end %>
+<div class="container">
+  <% if @goal.errors.any? %>
+    <h2 class="text-center">The following errors prevented the goal from being saved:</h2>
+    <ul class="text-center">
+      <% @goal.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  <% end %>
 
-<%= form_with(model: @goal, local: true) do |f| %>
-  <p>
-    <%= f.label :name %><br/>
-    <%= f.text_field :name %>
-  </p>
+  <div class="row justify-content-center">
+    <div class="col-7">
+      <%= form_with(model: @goal, class: "shadow p-3 mb-3 bg-info rounded", local: true) do |f| %>
+        <div class="form-group row mb-3 align-items-center justify-content-center">
+          <%= f.label :name, class: "col-1 col-form-label text-black mb-0 text-right" %>
+          <div class="col-9">
+            <%= f.text_field :name, class: "form-control shadow rounded", placeholder: "Enter your goal name" %>
+          </div>
+        </div>
 
-  <p>
-    <%= f.label :sport %><br/>
-    <%= f.text_field :sport %>
-  </p>
+        <div class="form-group row mb-3 align-items-center justify-content-center">
+          <%= f.label :sport, class: "col-1 col-form-label text-black mb-0 text-right" %>
+          <div class="col-9">
+            <%= f.text_field :sport, class: "form-control shadow rounded" %>
+          </div>
+        </div>
 
-  <p>
-    <%= f.submit %>
-  </p>
-<% end %>
+        <div class="form-group row justify-content-center">
+          <div class="col-10 text-center">
+            <%= f.submit 'Save', class: "btn btn-outline-secondary" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-3">
+    <div class="col-10 text-center">
+      <%= link_to 'Cancel and return to Goals listing', goals_path, class: 'btn btn-secondary' %>
+    </div>
+  </div>
+</div>
