@@ -1,8 +1,26 @@
-<h1>Showing Goals</h1>
+<h2 class="text-center mt-4"><%= @goal.name %></h2>
 
-<p><strong>Name: </strong><%= @goal.name %></p>
-<p><strong>Sport: </strong><%= @goal.sport %></p>
+<div class="container">
+    <div class="row justify-content-md-center">
+      <div class="col-8 mt-4">
+        <div class="card text-center shadow mb-5 bg-white rounded">
+          <div class="card-header font-italic">
+            by Chris Oak
+          </div>
+          <div class="card-body">
+            <p class="card-text"><%= @goal.sport %></p>
+            <%= link_to "Edit", edit_goal_path(@goal), class: "btn btn-secondary" %>
+            <%= button_to "Delete", goal_path(@goal), class: "btn btn-danger", method: :delete, data: {confirm: "Are you sure?"} %>
+          </div>
+          <div class="card-footer text-muted">
+            <small>
+              Created <%= time_ago_in_words(@goal.created_at) %> ago,
+              edited <%= time_ago_in_words(@goal.updated_at) %> ago
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
 
-<%= link_to 'Edit', edit_goal_path(@goal) %> |
-<%= link_to "Delete", goal_path(@goal), data: {turbo_method: :delete, turbo_confirm: "Are you sure?" } %> |
-<%= link_to 'Return to Goals listing', goals_path %>
+<p><%= link_to 'Create new goal', new_goal_path %></p>
