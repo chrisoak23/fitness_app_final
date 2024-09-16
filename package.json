@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@doabit/semantic-ui-sass": "^2.4.5",
+    "bootstrap": "5.3",
+    "jquery": "^3.7.1",
+    "popper.js": "^1.16.1"
+  }
+}
