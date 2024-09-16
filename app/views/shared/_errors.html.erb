@@ -1,0 +1,11 @@
+<% if @goal.errors.any? %>
+  <div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">The following errors prevented the goal from being saved:</h4>
+      <ul>
+        <% @goal.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+  </div>
+  <h2>The following errors prevented the goal from being saved:</h2>
+<% end %>
