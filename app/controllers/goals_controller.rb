@@ -1,5 +1,7 @@
 class GoalsController < ApplicationController
   before_action :set_goal, only: [:show, :edit, :update, :destroy]
+  before_action :require_user, except: [:show, :index]
+  before_action :require_same_user, only: [:edit, :update, :destroy]
 
   def show
   end
@@ -48,6 +50,13 @@ class GoalsController < ApplicationController
 
   def goal_params
     params.require(:goal).permit(:name, :sport)
+  end
+
+  def require_same_user
+    if current_user != @goal.user
+      flash[:alert] = "You can only edit or delete your own goal"
+      redirect_to @goal
+    end
   end
 
 end
