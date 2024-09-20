@@ -6,6 +6,7 @@
         <div class="card text-center shadow mb-5 bg-white rounded">
           <div class="card-header font-italic">
             <%= @goal.user.username if @goal.user %>
+            <%= link_to gravatar_for(@goal.user, size: 50), user_path(@goal.user) %>
           </div>
           <div class="card-body">
             <p class="card-text"><%= @goal.sport %></p>

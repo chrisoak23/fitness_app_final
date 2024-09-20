@@ -1,11 +1,11 @@
 class GoalsController < ApplicationController
-  before_action :set_article, only: [:show, :edit, :update, :destroy]
+  before_action :set_goal, only: [:show, :edit, :update, :destroy]
 
   def show
   end
 
   def index
-    @goals = Goal.all
+    @goals = Goal.paginate(page: params[:page], per_page: 5)
   end
 
   def new
@@ -16,7 +16,7 @@ class GoalsController < ApplicationController
   end
 
   def create
-    @goal = Goal.new(article_params)
+    @goal = Goal.new(goal_params)
     @goal.user = User.first
     if @goal.save
       flash[:notice] = "Goal was created successfully."
@@ -27,7 +27,7 @@ class GoalsController < ApplicationController
   end
 
   def update
-    if @goal.update(article_params)
+    if @goal.update(goal_params)
       flash[:notice] = "Goal was updated successfully."
       redirect_to @goal
     else
@@ -42,11 +42,11 @@ class GoalsController < ApplicationController
 
   private
 
-  def set_article
+  def set_goal
     @goal = Goal.find(params[:id])
   end
 
-  def article_params
+  def goal_params
     params.require(:goal).permit(:name, :sport)
   end
 

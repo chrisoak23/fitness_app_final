@@ -2,6 +2,24 @@
 
 <%= gravatar_for @user, size: 200 %>
 
+<div class="text-center mt-4">
+  <%= link_to "Edit your profile", edit_user_path(@user), class: "btn btn-outline-secondary" %>
+</div>
+
 <h3 class="text-center mt-4">Goals</h3>
 
+<div class="flickr_pagination">
+  <div class="page_info">
+    <%= page_entries_info @goals %>
+  </div>
+  <%= will_paginate @goals, :container => false %>
+</div>
+
 <%= render 'goals/goal' %>
+
+<div class="flickr_pagination mb-4">
+  <div class="page_info">
+    <%= page_entries_info @goals %>
+  </div>
+  <%= will_paginate @goals, :container => false %>
+</div>
