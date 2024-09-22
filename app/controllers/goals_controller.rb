@@ -7,7 +7,11 @@ class GoalsController < ApplicationController
   end
 
   def index
-    @goals = Goal.paginate(page: params[:page], per_page: 5)
+    if current_user.admin?
+      @goals = Goal.paginate(page: params[:page], per_page: 5)
+    else
+      @goals = current_user.goals.paginate(page: params[:page], per_page: 5)
+    end
   end
 
   def new
@@ -53,7 +57,7 @@ class GoalsController < ApplicationController
   end
 
   def require_same_user
-    if current_user != @goal.user
+    if current_user != @goal.user && !current_user.admin?
       flash[:alert] = "You can only edit or delete your own goal"
       redirect_to @goal
     end

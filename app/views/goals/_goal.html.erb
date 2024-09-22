@@ -1,6 +1,6 @@
 <div class="container">
   <% @goals.each do |goal| %>
-    <% if logged_in? && goal.user == current_user %>
+    <% if logged_in? && (goal.user == current_user || current_user.admin?) %>
       <div class="row justify-content-md-center">
         <div class="col-8 mt-4">
           <div class="card text-center shadow mb-5 bg-white rounded">
@@ -13,7 +13,7 @@
               <h5 class="card-title"><%= link_to goal.name, goal_path(goal) %></h5>
               <p class="card-text"><%= goal.sport %></p>
               <div class="btn-group" role="group">
-                <% if logged_in? && goal.user == current_user %>
+                <% if logged_in? && (goal.user == current_user || current_user.admin?) %>
                   <%= link_to "View", goal_path(goal), class: "btn btn-outline-primary" %>
                   <%= link_to "Edit", edit_goal_path(goal), class: "btn btn-outline-secondary" %>
                   <%= link_to "Delete", goal_path(goal), class: "btn btn-outline-danger", data: { turbo_method: :delete, confirm: "Are you sure?" } %>

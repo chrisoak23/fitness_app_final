@@ -4,11 +4,21 @@ class UsersController < ApplicationController
   before_action :require_same_user, only: [:edit, :update, :destroy]
 
   def show
-    @goals = @user.goals.paginate(page: params[:page], per_page: 5)
+    if current_user != @user && !current_user.admin?
+      flash[:alert] = "You can only view your own profile"
+      redirect_to current_user
+    else
+      @goals = @user.goals.paginate(page: params[:page], per_page: 5)
+    end
   end
 
   def index
-    @users = User.paginate(page: params[:page], per_page: 5)
+    if current_user.admin?
+      @users = User.paginate(page: params[:page], per_page: 5)
+    else
+      flash[:alert] = "You do not have permission to view this page"
+      redirect_to current_user
+    end
   end
 
   def new
@@ -40,7 +50,7 @@ class UsersController < ApplicationController
 
   def destroy
     @user.destroy
-    session[:user_id] = nil
+    session[:user_id] = nil if @user == current_user
     flash[:notice] = "Account and all associated goals successfully deleted"
     redirect_to root_path
   end
@@ -56,8 +66,8 @@ class UsersController < ApplicationController
   end
 
   def require_same_user
-    if current_user != @user
-      flash[:alert] = "You can only edit your own account"
+    if current_user != @user && !current_user.admin?
+      flash[:alert] = "You can only edit or delete your own account"
       redirect_to @user
     end
   end

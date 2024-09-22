@@ -9,7 +9,7 @@
 
 <div class="container">
   <% @users.each do |user| %>
-    <% if logged_in? && user == current_user %>
+    <% if logged_in? && (user == current_user || current_user.admin?) %>
       <div class="row justify-content-md-center">
         <div class="col-8 mt-4">
           <div class="card text-center shadow mb-5 bg-white rounded">
@@ -22,9 +22,13 @@
               </h5>
               <p class="card-text"><%= pluralize(user.goals.count, "goal") %></p>
               <div class="btn-group" role="group">
-                <% if logged_in? && user == current_user %>
-                  <%= link_to "View Profile", user, class: "btn btn-outline-primary" %>
-                  <%= link_to "Edit Profile", edit_user_path(user), class: "btn btn-outline-secondary" %>
+                <% if logged_in? %>
+                  <% if user == current_user || current_user.admin? %>
+                    <%= link_to "View Profile", user, class: "btn btn-outline-primary" %>
+                    <%= link_to "Edit Profile", edit_user_path(user), class: "btn btn-outline-secondary" %>
+                    <%= link_to "Delete User", user_path(user), class: "btn btn-outline-danger",
+                                data: { turbo_method: :delete, confirm: "Are you sure?" } %>
+                  <% end %>
                 <% end %>
               </div>
             </div>

@@ -10,8 +10,10 @@
           </div>
           <div class="card-body">
             <p class="card-text"><%= @goal.sport %></p>
-            <%= link_to "Edit", edit_goal_path(@goal), class: "btn btn-secondary" %>
-            <%= button_to "Delete", goal_path(@goal), class: "btn btn-danger", method: :delete, data: {confirm: "Are you sure?"} %>
+            <% if logged_in? && (@goal.user == current_user || current_user.admin?) %>
+              <%= link_to "Edit", edit_goal_path(@goal), class: "btn btn-secondary" %>
+              <%= button_to "Delete", goal_path(@goal), class: "btn btn-danger", method: :delete, data: {confirm: "Are you sure?"} %>
+            <% end %>
           </div>
           <div class="card-footer text-muted">
             <small>
