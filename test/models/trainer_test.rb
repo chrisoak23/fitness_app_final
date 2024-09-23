@@ -26,7 +26,7 @@ class CategoryTest < ActiveSupport::TestCase
     assert_not @trainer.valid?
   end
 
-  test "name sould not be too short" do
+  test "name should not be too short" do
     @trainer.name = ""
     assert_not @trainer.valid?
   end
