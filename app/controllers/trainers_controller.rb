@@ -24,6 +24,20 @@ class TrainersController < ApplicationController
     end
   end
 
+  def edit
+    @trainer = Trainer.find(params[:id])
+  end
+
+  def update
+    @trainer = Trainer.find(params[:id])
+    if @trainer.update(trainer_params)
+      flash[:notice] = "Trainer updated successfully"
+      redirect_to @trainer
+    else
+      render 'edit'
+    end
+  end
+
   private
 
   def trainer_params
