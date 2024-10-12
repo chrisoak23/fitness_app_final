@@ -8,6 +8,11 @@
   </div>
 <% end %>
 
+<h3 class="text-center mt-4">Trainers</h3>
+<% if @user.trainers.any? %>
+  <div class="text-center mt-2"><%= render @user.trainers %></div>
+<% end %>
+
 <h3 class="text-center mt-4">Goals</h3>
 
 <div class="flickr_pagination">

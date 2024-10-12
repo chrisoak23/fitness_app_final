@@ -1,0 +1,25 @@
+<h1 class="text-center mt-4">Trainer: <%= @trainer.name %>'s profile</h1>
+
+<% if logged_in? && current_user.admin? %>
+  <div class="text-center mt-4">
+    <%= link_to "Edit Trainer", edit_trainer_path(@trainer), class: "btn btn-outline-secondary" %>
+  </div>
+<% end %>
+
+<h3 class="text-center mt-4">Clients</h3>
+
+<div class="flickr_pagination">
+  <div class="page_info">
+    <%= page_entries_info @users %>
+  </div>
+  <%= will_paginate @users, :container => false %>
+</div>
+
+<%= render 'trainers/form' %>
+
+<div class="flickr_pagination mb-4">
+  <div class="page_info">
+    <%= page_entries_info @users %>
+  </div>
+  <%= will_paginate @users, :container => false %>
+</div>

@@ -53,7 +53,7 @@ class GoalsController < ApplicationController
   end
 
   def goal_params
-    params.require(:goal).permit(:name, :sport)
+    params.require(:goal).permit(:name, :sport, )
   end
 
   def require_same_user

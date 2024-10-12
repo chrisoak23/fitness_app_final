@@ -22,6 +22,19 @@
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
         </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Trainers
+          </a>
+          <ul class="dropdown-menu">
+            <% if logged_in? && current_user.admin? %>
+              <%= link_to "Create New Trainer", new_trainer_path, class: "dropdown-item" %>
+            <% end %>
+            <%= link_to "View Trainers", trainers_path, class: "dropdown-item" %>
+          </ul>
+        </li>
+
         <% if logged_in? %>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

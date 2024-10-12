@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_many :user_trainers
+  has_many :trainers, through: :user_trainers
   before_save { self.email = email.downcase }
   has_many :goals, dependent: :destroy
   validates :username,

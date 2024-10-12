@@ -20,6 +20,11 @@
               <h5 class="card-title">
                 <%= link_to gravatar_for(user, size: 150), user %>
               </h5>
+              Trainers:
+                <% if user.trainers.any? %>
+                  <div class="text-center mt-2"><%= render user.trainers %></div>
+                <% end %>
+              <br>
               <p class="card-text"><%= pluralize(user.goals.count, "goal") %></p>
               <div class="btn-group" role="group">
                 <% if logged_in? %>

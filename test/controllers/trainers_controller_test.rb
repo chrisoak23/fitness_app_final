@@ -3,6 +3,8 @@ require "test_helper"
 class TrainersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @trainer = Trainer.create(name: "Chris")
+    @admin_user = User.create(username: "johndoe", email: "johndoe@example.com",
+                              password: "password", admin: true)
   end
 
   test "should get index" do
@@ -11,16 +13,26 @@ class TrainersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get new" do
+    sign_in_as(@admin_user)
     get new_trainer_url
     assert_response :success
   end
 
   test "should create trainer" do
+    sign_in_as(@admin_user)
     assert_difference("Trainer.count", 1) do
       post trainers_url, params: { trainer: { name: "Eilish" } }
     end
 
     assert_redirected_to trainer_url(Trainer.last)
+  end
+
+  test "should not create trainer if not admin" do
+    assert_no_difference("Trainer.count") do
+      post trainers_url, params: { trainer: { name: "Eilish" } }
+    end
+
+    assert_redirected_to trainers_url
   end
 
   test "should show trainer" do
