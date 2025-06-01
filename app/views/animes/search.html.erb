@@ -1,0 +1,30 @@
+<h1>Search Results for "<%= params[:query] %>"</h1>
+
+<h2>Local Results</h2>
+<% if @local_results.any? %>
+  <% @local_results.each do |anime| %>
+    <div>
+      <%= link_to anime.title, anime_path(anime) %>
+    </div>
+  <% end %>
+<% else %>
+  <p>No local results found.</p>
+<% end %>
+
+<h2>AniList Results</h2>
+<% if @search_results.any? %>
+  <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+    <% @search_results.each do |anime| %>
+      <div style="width: 200px;">
+        <%= link_to import_from_api_animes_path(anilist_id: anime["id"]), method: :post do %>
+          <% if anime.dig("coverImage", "large").present? %>
+            <img src="<%= anime["coverImage"]["large"] %>" style="width: 100%;" />
+          <% end %>
+          <h4><%= anime.dig("title", "english") || anime.dig("title", "romaji") %></h4>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p>No AniList results found.</p>
+<% end %>

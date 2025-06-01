@@ -1,0 +1,32 @@
+<h1 class="text-center mt-4">Edit Anime Ranking</h1>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-10">
+      <%= form_with(model: @ranking, url: ranking_path(@ranking), method: :patch, local: true) do |f| %>
+        <div class="form-group">
+          <%= f.label :anime_id, "Anime" %>
+          <%= f.collection_select :anime_id, @animes, :id, :title, { selected: @ranking.anime_id }, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :score, "Score (0-10)" %>
+          <%= f.number_field :score, step: 0.1, min: 0, max: 10, value: @ranking.score, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :comment, "Comments" %>
+          <%= f.text_area :comment, value: @ranking.comment, class: "form-control" %>
+        </div>
+
+        <div class="form-group text-center">
+          <%= f.submit "Update Ranking", class: "btn btn-primary" %>
+          <%= link_to "Cancel", rankings_path, class: "btn btn-outline-secondary" %>
+        </div>
+
+        <%= link_to "Delete Ranking", rankings_path(@ranking), class: "btn btn-danger",
+                    data: { turbo_method: :delete, confirm: "Are you sure?" } %>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <%= link_to "FITNESS APP", root_path, class: "navbar-brand", id: "logo" %>
+    <%= link_to "ANIME APP", root_path, class: "navbar-brand", id: "logo" %>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -9,30 +9,8 @@
         <li class="nav-item">
           <%= link_to "Users", users_path, class: "nav-link" %>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Goals
-          </a>
-          <ul class="dropdown-menu">
-            <% if logged_in? %>
-              <%= link_to "Create New Goal", new_goal_path, class: "dropdown-item" %>
-            <% end %>
-            <%= link_to "View Goals", goals_path, class: "dropdown-item" %>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
-
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Trainers
-          </a>
-          <ul class="dropdown-menu">
-            <% if logged_in? && current_user.admin? %>
-              <%= link_to "Create New Trainer", new_trainer_path, class: "dropdown-item" %>
-            <% end %>
-            <%= link_to "View Trainers", trainers_path, class: "dropdown-item" %>
-          </ul>
+        <li class="nav-item">
+          <%= link_to "Anime Compendium", animes_path, class: "nav-link" %>
         </li>
 
         <% if logged_in? %>
@@ -42,6 +20,7 @@
             </a>
             <ul class="dropdown-menu">
               <%= link_to "View Your Profile", user_path(current_user), class: "dropdown-item" %>
+              <%= link_to "Vew Your Anime Rankings", rankings_path(current_user), class: "dropdown-item" %>
               <%= link_to "Edit Your Profile", edit_user_path(current_user), class: "dropdown-item" %>
               <%= link_to "Delete Your Profile", user_path(current_user), class: "dropdown-item text-danger", data: { turbo_method: :delete, confirm: "Are you sure?" } %>
             </ul>

@@ -10,13 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_10_12_155738) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_01_175748) do
+  create_table "animes", force: :cascade do |t|
+    t.string "title"
+    t.text "synopsis"
+    t.integer "mal_id"
+    t.float "score"
+    t.integer "episodes"
+    t.string "status"
+    t.date "aired_from"
+    t.date "aired_to"
+    t.string "image_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "goals", force: :cascade do |t|
     t.string "name"
     t.string "sport"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
+  end
+
+  create_table "rankings", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "anime_id", null: false
+    t.decimal "score"
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["anime_id"], name: "index_rankings_on_anime_id"
+    t.index ["user_id"], name: "index_rankings_on_user_id"
   end
 
   create_table "trainers", force: :cascade do |t|
@@ -39,4 +64,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_12_155738) do
     t.boolean "admin", default: false
   end
 
+  add_foreign_key "rankings", "animes"
+  add_foreign_key "rankings", "users"
 end

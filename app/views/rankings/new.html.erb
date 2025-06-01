@@ -1,0 +1,28 @@
+<h1 class="text-center mt-4">Rank an Anime</h1>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-10">
+      <%= form_with(model: @ranking, url: rankings_path, local: true) do |f| %>
+        <div class="form-group">
+          <%= f.label :anime_id, "Anime" %>
+          <%= f.collection_select :anime_id, @animes, :id, :title, { prompt: "Select an anime" }, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :score, "Score (0-10)" %>
+          <%= f.number_field :score, step: 0.1, min: 0, max: 10, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :comment, "Comments (optional)" %>
+          <%= f.text_area :comment, class: "form-control" %>
+        </div>
+
+        <div class="form-group text-center">
+          <%= f.submit "Submit Ranking", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

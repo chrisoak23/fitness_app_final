@@ -8,21 +8,11 @@
   </div>
 <% end %>
 
-<h3 class="text-center mt-4">Trainers</h3>
-<% if @user.trainers.any? %>
-  <div class="text-center mt-2"><%= render @user.trainers %></div>
-<% end %>
-
-<h3 class="text-center mt-4">Goals</h3>
-
-<div class="flickr_pagination">
-  <div class="page_info">
-    <%= page_entries_info @goals %>
+<% if logged_in? && @user == current_user %>
+  <div class="text-center mt-4">
+    <%= link_to "View your anime rankings", rankings_path(@user), class: "btn btn-secondary" %>
   </div>
-  <%= will_paginate @goals, :container => false %>
-</div>
-
-<%= render 'goals/goal' %>
+<% end %>
 
 <div class="flickr_pagination mb-4">
   <div class="page_info">

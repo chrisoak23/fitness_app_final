@@ -1,0 +1,31 @@
+<h1 class="text-center mt-4">My Anime Rankings</h1>
+
+<%= link_to "Add New Ranking", new_ranking_path, class: "btn btn-primary mb-4" %>
+
+<!-- app/views/rankings/index.html.erb -->
+<div class="sorting-controls mb-3">
+  <%= link_to "Highest Rated", rankings_path(sort: "highest"), class: "btn btn-sm #{params[:sort] != 'newest' ? 'btn-primary' : 'btn-outline-secondary'}" %>
+  <%= link_to "Newest First", rankings_path(sort: "newest"), class: "btn btn-sm #{params[:sort] == 'newest' ? 'btn-primary' : 'btn-outline-secondary'}" %>
+</div>
+
+<% if @rankings.any? %>
+  <div class="row">
+    <% @rankings.each do |ranking| %>
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <%= link_to edit_ranking_path(ranking), class: "text-decoration-none" do %>
+            <div class="card-body">
+              <h5 class="card-title"><%= ranking.anime.title %></h5>
+              <h6 class="card-subtitle mb-2 text-muted">Score: <%= ranking.score %></h6>
+              <% if ranking.comment.present? %>
+                <p class="card-text"><%= ranking.comment %></p>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p class="text-center">You haven't ranked any anime yet.</p>
+<% end %>

@@ -1,6 +1,9 @@
 class User < ApplicationRecord
   has_many :user_trainers
   has_many :trainers, through: :user_trainers
+  has_many :rankings
+  has_many :ranked_animes, through: :rankings, source: :anime
+
   before_save { self.email = email.downcase }
   has_many :goals, dependent: :destroy
   validates :username,

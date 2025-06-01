@@ -1,0 +1,25 @@
+<h1><%= @anime.title %></h1>
+
+<% if @anime.image_url.present? %>
+  <img src="<%= @anime.image_url %>" alt="<%= @anime.title %>" style="max-width: 300px; float: left; margin-right: 20px;">
+<% end %>
+
+<div style="overflow: hidden;">
+  <% if @anime.status.present? %>
+    <p><strong>Status:</strong> <%= @anime.status %></p>
+  <% end %>
+
+  <% if @anime.episodes.present? %>
+    <p><strong>Episodes:</strong> <%= @anime.episodes %></p>
+  <% end %>
+
+  <% if @anime.aired_from.present? %>
+    <p><strong>Aired from:</strong> <%= @anime.aired_from.strftime('%B %d, %Y') %></p>
+  <% end %>
+
+  <div style="margin-top: 20px;">
+    <%= simple_format(@anime.synopsis) %>
+  </div>
+</div>
+
+<%= link_to 'Back to List', animes_path, style: "display: inline-block; margin-top: 20px;" %>
