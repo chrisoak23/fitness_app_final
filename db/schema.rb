@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_02_163912) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_02_221612) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -28,7 +28,37 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_02_163912) do
     t.datetime "updated_at", null: false
     t.text "genres", default: [], array: true
     t.integer "anilist_id"
+    t.string "title_romaji"
+    t.string "title_english"
+    t.string "title_native"
+    t.integer "episode_duration"
+    t.float "mean_score"
+    t.integer "popularity"
+    t.integer "favourites"
+    t.integer "trending"
+    t.string "season"
+    t.integer "season_year"
+    t.string "format"
+    t.string "source"
+    t.text "studios", default: [], array: true
+    t.string "country_of_origin"
+    t.boolean "is_licensed"
+    t.string "hashtag"
+    t.string "trailer_url"
+    t.string "trailer_thumbnail"
+    t.string "banner_image"
+    t.string "cover_image_color"
+    t.string "site_url"
+    t.jsonb "tags", default: {}
+    t.jsonb "external_links", default: {}
+    t.jsonb "streaming_episodes", default: {}
+    t.jsonb "rankings", default: {}
+    t.jsonb "stats", default: {}
+    t.index ["format"], name: "index_animes_on_format"
     t.index ["genres"], name: "index_animes_on_genres", using: :gin
+    t.index ["popularity"], name: "index_animes_on_popularity"
+    t.index ["season_year"], name: "index_animes_on_season_year"
+    t.index ["trending"], name: "index_animes_on_trending"
   end
 
   create_table "goals", force: :cascade do |t|

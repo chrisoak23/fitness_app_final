@@ -5,7 +5,7 @@
   <img src="<%= @anime.image_url %>" alt="<%= @anime.title %>" style="max-width: 300px; float: left; margin-right: 20px;">
 <% end %>
 
-<div style="overflow: hidden;">
+<a style="overflow: hidden;">
   <% if @anime.status.present? %>
     <p><strong>Status:</strong> <%= @anime.status %></p>
   <% end %>
@@ -18,12 +18,52 @@
     <p><strong>Score:</strong> ⭐ <%= @anime.score %></p>
   <% end %>
 
-  <% if @anime.genres.present? %>
+  <% if @anime.genres.present? && @anime.genres.any? %>
     <p><strong>Genres:</strong> <%= @anime.genres.join(', ') %></p>
   <% end %>
 
   <% if @anime.aired_from.present? %>
-    <p><strong>Aired from:</strong> <%= @anime.aired_from.strftime('%B %d, %Y') %></p>
+    <p><strong>Start:</strong> <%= @anime.aired_from.strftime('%B %d, %Y') %></p>
+  <% end %>
+
+  <% if @anime.format %>
+    <p><strong>Format:</strong> <%= @anime.format %></p>
+  <% end %>
+
+  <% if @anime.source %>
+    <p><strong>Source:</strong> <%= @anime.source.humanize %></p>
+  <% end %>
+
+  <% if @anime.popularity %>
+    <p><strong>Popularity Rank:</strong> #<%= @anime.popularity %></p>
+  <% end %>
+
+  <% if @anime.country_of_origin %>
+    <p><strong>Country of Origin:</strong> <%= @anime.country_of_origin %></p>
+  <% end %>
+
+  <% if @anime.tags.present? && @anime.tags.any? %>
+    <p>
+      <strong>Tags:</strong>
+      <% @anime.tags.each do |tag| %>
+        <%= tag['name'] %>,
+      <% end %>
+    </p>
+  <% end %>
+
+  <% if @anime.external_links.present? %>
+    <div class="external-links">
+      <strong>External Links:</strong>
+      <ul>
+        <% @anime.external_links.each do |external_link| %>
+          <li>
+            <a href="<%= external_link['url'] %>" target="_blank" rel="noopener noreferrer">
+              <%= external_link['site'] %>
+            </a>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   <% end %>
 
   <div style="margin-top: 20px;">
