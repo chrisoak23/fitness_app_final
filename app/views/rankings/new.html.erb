@@ -1,3 +1,4 @@
+<!-- app/views/rankings/new.html.erb -->
 <h1 class="text-center mt-4">Rank an Anime</h1>
 
 <div class="container">
@@ -6,7 +7,9 @@
       <%= form_with(model: @ranking, url: rankings_path, local: true) do |f| %>
         <div class="form-group">
           <%= f.label :anime_id, "Anime" %>
-          <%= f.collection_select :anime_id, @animes, :id, :title, { prompt: "Select an anime" }, class: "form-control" %>
+          <%= f.collection_select :anime_id, @animes, :id, :title,
+                                  { prompt: "Search and select an anime..." },
+                                  { class: "form-control anime-select2", style: "width: 100%;" } %>
         </div>
 
         <div class="form-group">
@@ -16,13 +19,81 @@
 
         <div class="form-group">
           <%= f.label :comment, "Comments (optional)" %>
-          <%= f.text_area :comment, class: "form-control" %>
+          <%= f.text_area :comment, class: "form-control", rows: 4 %>
         </div>
 
         <div class="form-group text-center">
           <%= f.submit "Submit Ranking", class: "btn btn-primary" %>
+          <%= link_to "Cancel", rankings_path, class: "btn btn-outline-secondary" %>
         </div>
       <% end %>
     </div>
   </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('.anime-select2').select2({
+            placeholder: "Search and select an anime...",
+            allowClear: true,
+            width: '100%',
+            // Optional: Add minimum input length before search starts
+            minimumInputLength: 2,
+
+            // Optional: Customize the dropdown with anime info
+            templateResult: formatAnime,
+            templateSelection: formatAnimeSelection
+        });
+
+        // Optional: Custom formatting for dropdown results
+        function formatAnime(anime) {
+            if (!anime.id) {
+                return anime.text;
+            }
+
+            // You could enhance this to show more info if you pass it from the controller
+            var $anime = $(
+                '<span>' + anime.text + '</span>'
+            );
+            return $anime;
+        }
+
+        function formatAnimeSelection(anime) {
+            return anime.text;
+        }
+    });
+</script>
+
+<style>
+    /* Custom styles for Select2 */
+    .select2-container--default .select2-selection--single {
+        height: 38px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #555;
+        padding-left: 0;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 36px;
+    }
+
+    .select2-dropdown {
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+
+    .select2-search--dropdown .select2-search__field {
+        padding: 4px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+
+    .select2-results__option--highlighted {
+        background-color: #007bff;
+    }
+</style>
