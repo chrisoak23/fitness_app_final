@@ -1,31 +1,105 @@
-<h1>Anime List</h1>
+<!-- app/views/animes/index.html.erb -->
+<h1>Anime Compendium</h1>
 
-<%= link_to "Search Anime", search_animes_path, class: "btn btn-primary mb-3" %>
+<div class="mb-3">
+  <%= link_to "Search Anime", search_animes_path, class: "btn btn-primary" %>
+</div>
 
-<div class="row">
-  <% @animes.each do |anime| %>
-    <div class="col-md-4 mb-4">
-      <div class="card">
-        <% if anime.image_url %>
-          <%= image_tag anime.image_url, class: "card-img-top", style: "height: 300px; object-fit: cover;" %>
-        <% end %>
-        <div class="card-body">
-          <h5 class="card-title"><%= anime.title %></h5>
-          <p class="card-text">
+<% if @animes.any? %>
+  <div class="mb-3">
+    <small class="text-muted">
+      Showing <%= @animes.offset + 1 %>-<%= @animes.offset + @animes.length %> of <%= @animes.total_entries %> anime
+    </small>
+  </div>
+
+  <div class="anime-list">
+    <% @animes.each do |anime| %>
+      <div class="anime-item d-flex align-items-center mb-3 p-3 border rounded">
+        <!-- Image on the left -->
+        <div class="anime-image mr-3">
+          <% if anime.image_url %>
+            <%= image_tag anime.image_url, class: "img-thumbnail", style: "width: 100px; height: 140px; object-fit: cover;" %>
+          <% else %>
+            <div class="no-image-placeholder" style="width: 100px; height: 140px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+              <span class="text-muted">No Image</span>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Info in the middle -->
+        <div class="anime-info flex-grow-1">
+          <h5 class="mb-1"><%= anime.title %></h5>
+
+          <div class="anime-meta mb-2">
             <small class="text-muted">
-              Score: <%= anime.score || 'N/A' %> |
-              Episodes: <%= anime.episodes || 'N/A' %> |
-              Status: <%= anime.status %>
+              <% if anime.score %>
+                <span class="mr-2">⭐ <%= anime.score %></span>
+              <% end %>
+              <% if anime.episodes %>
+                <span class="mr-2">📺 <%= anime.episodes %> episodes</span>
+              <% end %>
+              <% if anime.status %>
+                <span class="mr-2"><%= anime.status %></span>
+              <% end %>
             </small>
+          </div>
+
+          <% if anime.genres.present? %>
+            <div class="anime-genres mb-2">
+              <small class="text-muted">
+                <strong>Genres:</strong> <%= anime.genres.join(', ') %>
+              </small>
+            </div>
+          <% end %>
+
+          <p class="anime-synopsis mb-0">
+            <small><%= truncate(anime.synopsis, length: 200) %></small>
           </p>
-          <p class="card-text"><%= truncate(anime.synopsis, length: 100) %></p>
+        </div>
+
+        <!-- Button on the right -->
+        <div class="anime-action ml-3">
           <%= link_to "View Details", anime_path(anime), class: "btn btn-primary" %>
         </div>
       </div>
-    </div>
-  <% end %>
-</div>
+    <% end %>
+  </div>
 
-<% if @animes.empty? %>
-  <p>No anime found. <%= link_to "Search for anime", search_animes_path %> to get started!</p>
+  <%= will_paginate @animes, class: "pagination justify-content-center" %>
+<% else %>
+  <div class="text-center">
+    <h3>Loading anime...</h3>
+    <p>If this message persists, there may be an issue connecting to the anime database.</p>
+  </div>
 <% end %>
+
+<style>
+    .anime-item {
+        transition: background-color 0.2s;
+    }
+
+    .anime-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .anime-info h5 {
+        color: #333;
+    }
+
+    @media (max-width: 768px) {
+        .anime-item {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .anime-image {
+            margin-right: 0 !important;
+            margin-bottom: 1rem;
+        }
+
+        .anime-action {
+            margin-left: 0 !important;
+            margin-top: 1rem;
+        }
+    }
+</style>

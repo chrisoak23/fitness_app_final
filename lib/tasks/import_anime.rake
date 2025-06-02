@@ -1,31 +1,42 @@
+# lib/tasks/anime_import.rake
 namespace :anime do
-  desc "Import anime from AniList API"
-  task import: :environment do
-    fetcher = AnilistFetcher.new
-    page = 1
+  desc "Import top anime from MyAnimeList"
+  task import_top: :environment do
+    puts "Starting anime import..."
 
-    loop do
-      puts "Fetching page #{page}..."
-      data = fetcher.fetch_page(page)
+    imported_count = JikanApiService.bulk_import_top_anime(20) # Import 20 pages = ~500 anime
 
-      media = data.dig("data", "Page", "media")
-      break unless media
+    puts "Successfully imported #{imported_count} anime!"
+    puts "Total anime in database: #{Anime.count}"
+  end
 
-      media.each do |anime_data|
-        title = anime_data.dig("title", "english") || anime_data.dig("title", "romaji")
-        description = ActionView::Base.full_sanitizer.sanitize(anime_data["description"])
-        year = anime_data.dig("startDate", "year")
+  desc "Import anime by popularity"
+  task import_popular: :environment do
+    puts "Starting popular anime import..."
 
-        Anime.find_or_create_by(title: title) do |anime|
-          anime.synopsis = description
-          anime.aired_from = "#{year}-01-01" if year.present?
+    imported_count = 0
+
+    (1..50).each do |page|
+      result = JikanApiService.get_all_anime_by_genre(nil, 25, page)
+
+      result[:data].each do |anime_data|
+        next if Anime.exists?(mal_id: anime_data['mal_id'])
+
+        begin
+          Anime.create_from_api_data(anime_data)
+          imported_count += 1
+          print "."
+        rescue => e
+          Rails.logger.error "Failed to create anime #{anime_data['title']}: #{e.message}"
         end
       end
 
-      break unless data.dig("data", "Page", "pageInfo", "hasNextPage")
-      page += 1
+      sleep(0.5) # Respect rate limits
+
+      break unless result[:pagination]['has_next_page']
     end
 
-    puts "Done importing."
+    puts "\nSuccessfully imported #{imported_count} anime!"
+    puts "Total anime in database: #{Anime.count}"
   end
 end

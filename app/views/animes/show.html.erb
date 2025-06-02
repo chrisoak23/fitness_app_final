@@ -1,3 +1,4 @@
+<!-- app/views/animes/show.html.erb -->
 <h1><%= @anime.title %></h1>
 
 <% if @anime.image_url.present? %>
@@ -11,6 +12,14 @@
 
   <% if @anime.episodes.present? %>
     <p><strong>Episodes:</strong> <%= @anime.episodes %></p>
+  <% end %>
+
+  <% if @anime.score.present? %>
+    <p><strong>Score:</strong> ⭐ <%= @anime.score %></p>
+  <% end %>
+
+  <% if @anime.genres.present? %>
+    <p><strong>Genres:</strong> <%= @anime.genres.join(', ') %></p>
   <% end %>
 
   <% if @anime.aired_from.present? %>

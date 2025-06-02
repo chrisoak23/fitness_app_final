@@ -41,7 +41,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       session[:user_id] = @user.id
-      flash[:notice] = "#{@user.username} was created successfully. Welcome to the Fitness App!"
+      flash[:notice] = "#{@user.username} was created successfully. Welcome to the Anime App!"
       redirect_to goals_path
     else
       render :new, status: :unprocessable_entity

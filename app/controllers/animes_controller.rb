@@ -1,74 +1,108 @@
+# app/controllers/animes_controller.rb
 class AnimesController < ApplicationController
-  PER_PAGE = 25
-
   def index
-    @animes = Anime.paginate(page: params[:page], per_page: PER_PAGE)
+    page = params[:page]&.to_i || 1
+    per_page = 25
+
+    # Always fetch from API to get the latest data
+    api_result = JikanApiService.get_top_anime(per_page, page)
+
+    if api_result[:data].present?
+      # Create or update anime records on the fly
+      @anime_data = api_result[:data].map do |anime_data|
+        anime = Anime.find_or_initialize_by(mal_id: anime_data['mal_id'])
+        anime.assign_attributes(
+          title: anime_data['title'],
+          synopsis: anime_data['synopsis'],
+          episodes: anime_data['episodes'],
+          status: anime_data['status'],
+          score: anime_data['score'],
+          image_url: anime_data.dig('images', 'jpg', 'image_url'),
+          aired_from: parse_date(anime_data.dig('aired', 'from')),
+          aired_to: parse_date(anime_data.dig('aired', 'to')),
+          genres: extract_genres(anime_data['genres'])
+        )
+        anime.save if anime.changed?
+        anime
+      end
+
+      # Create a paginated collection
+      @animes = WillPaginate::Collection.create(page, per_page, api_result[:pagination]['items']['total']) do |pager|
+        pager.replace(@anime_data)
+      end
+    else
+      # Fallback to database if API fails
+      @animes = Anime.order(:title).paginate(page: page, per_page: per_page)
+      flash.now[:alert] = "Unable to fetch from API, showing cached data" if @animes.any?
+    end
   end
 
   def show
     @anime = Anime.find_by(id: params[:id])
 
-    if @anime.nil?
-      flash[:alert] = "Anime not found"
-      redirect_to animes_path
+    # If anime not found in database, try to fetch from API using MAL ID
+    unless @anime
+      mal_id = params[:id].to_i
+      @anime = Anime.find_or_create_from_api(mal_id)
     end
+
+    redirect_to animes_path, alert: 'Anime not found' unless @anime
   end
 
   def search
     if params[:query].present?
-      # Use AniList API search
-      @search_results = AnilistFetcher.new.search_anime_by_title(params[:query])
-      @local_results = Anime.where("title ILIKE ?", "%#{params[:query]}%").limit(10)
-    else
-      @search_results = []
-      @local_results = []
-    end
-  end
+      page = params[:page]&.to_i || 1
+      per_page = 25
 
-  def import_from_api
-    anilist_id = params[:anilist_id].to_i
-    anime = Anime.find_or_create_from_anilist(anilist_id)
+      # Search API directly
+      api_result = JikanApiService.search_anime(params[:query], per_page, page)
 
-    if anime
-      redirect_to anime_path(anime), notice: 'Anime imported successfully!'
-    else
-      redirect_to search_animes_path, alert: 'Failed to import anime'
-    end
-  end
-
-  def populate_with_top_anime
-    fetcher = AnilistFetcher.new
-    page = 1
-    total_pages = 10 # import first 10 pages (~250 anime if 25 per page)
-
-    while page <= total_pages
-      response = fetcher.fetch_page(page, 25)
-      media = response.dig("data", "Page", "media") || []
-
-      media.each do |anime_data|
-        title = anime_data.dig("title", "english") || anime_data.dig("title", "romaji")
-        next if Anime.exists?(title: title)
-
-        begin
-          Anime.find_or_create_by(title: title) do |anime|
-            anime.synopsis = ActionView::Base.full_sanitizer.sanitize(anime_data["description"])
-            anime.episodes = anime_data["episodes"]
-            anime.status = anime_data["status"]
-            anime.image_url = anime_data.dig("coverImage", "large")
-
-            if (d = anime_data["startDate"])
-              anime.aired_from = Date.new(d["year"], d["month"] || 1, d["day"] || 1) rescue nil
-            end
-          end
-        rescue => e
-          Rails.logger.error "Failed to save anime: #{e.message}"
+      if api_result && api_result[:data].present?
+        # Process and save results
+        @anime_data = api_result[:data].map do |anime_data|
+          anime = Anime.find_or_initialize_by(mal_id: anime_data['mal_id'])
+          anime.assign_attributes(
+            title: anime_data['title'],
+            synopsis: anime_data['synopsis'],
+            episodes: anime_data['episodes'],
+            status: anime_data['status'],
+            score: anime_data['score'],
+            image_url: anime_data.dig('images', 'jpg', 'image_url'),
+            aired_from: parse_date(anime_data.dig('aired', 'from')),
+            aired_to: parse_date(anime_data.dig('aired', 'to')),
+            genres: extract_genres(anime_data['genres'])
+          )
+          anime.save if anime.changed?
+          anime
         end
+
+        # Create paginated results
+        total_count = api_result[:pagination]['items']['total'] rescue @anime_data.length
+        @results = WillPaginate::Collection.create(page, per_page, total_count) do |pager|
+          pager.replace(@anime_data)
+        end
+      else
+        # Fallback to local search
+        @results = Anime.where("title ILIKE ?", "%#{params[:query]}%")
+                        .order(:title)
+                        .paginate(page: page, per_page: per_page)
       end
-
-      page += 1
+    else
+      @results = Anime.none.paginate(page: 1, per_page: 25)
     end
-
-    redirect_to animes_path, notice: "Anime imported!"
   end
 
+  private
+
+  def parse_date(date_string)
+    return nil if date_string.blank?
+    DateTime.parse(date_string)
+  rescue
+    nil
+  end
+
+  def extract_genres(genres_array)
+    return [] unless genres_array.is_a?(Array)
+    genres_array.map { |genre| genre['name'] }.compact
+  end
 end
